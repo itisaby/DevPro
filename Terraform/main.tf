@@ -53,8 +53,8 @@ resource "aws_security_group" "allow_tls" {
 
 
 resource "aws_key_pair" "deploy" {
-  key_name   = "deployhub"
-  public_key = file("/home/arnab/.ssh/devenv.pub")
+  key_name   = var.key_name
+  public_key = var.public_key
 
 }
 
@@ -82,5 +82,6 @@ resource "aws_instance_type" "name" {
 
 output "public_ip" {
   value = aws_instance_type.name.public_ip
+  sensitive = true
 }
   
