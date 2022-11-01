@@ -41,7 +41,7 @@ jobs:
         working-directory: ./Terraform
       - name: Set Output
         id: set-output
-        run: echo "::set-output name=instance_public_ip::$(terraform output -raw instance_public_ip)"
+        run: echo "::set-output name=instance_public_ip::$(terraform output -raw public_ip)"
         working-directory: ./Terraform
   deploy-app:
     runs-on: ubuntu-latest
