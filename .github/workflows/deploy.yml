@@ -7,8 +7,8 @@ env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   TF_STATE_BUCKET_NAME: ${{ secrets.TF_STATE_BUCKET_NAME }}
-  PRIVATE_SSH_KEY: ${{ secrets.PRIVATE_SSH_KEY }}
-  PUBLIC_SSH_KEY: ${{ secrets.PUBLIC_SSH_KEY }}
+  PRIVATE_SSH_KEY: ${{ secrets.AWS_SSH_KEY_PRIVATE }}
+  PUBLIC_SSH_KEY: ${{ secrets.AWS_SSH_KEY_PUBLIC }}
   AWS_REGION: us-east-1
 
 jobs:
@@ -83,7 +83,7 @@ jobs:
         with:
           host: ${{ env.SERVER_PUBLIC_IP }}
           username: ubuntu
-          key: ${{ secrets.PRIVATE_SSH_KEY }}
+          key: ${{ env.PRIVATE_SSH_KEY }}
           envs: ECR_REPOSITORY,IMAGE_TAG,AWS_REGION,SERVER_PUBLIC_IP,PRIVATE_SSH_KEY, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION
           script: |-
             sudo apt update
