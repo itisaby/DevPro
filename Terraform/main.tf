@@ -54,7 +54,7 @@ resource "aws_security_group" "allow_tls" {
 
 
 resource "aws_key_pair" "deploy" {
-  key_name   = var.key_name
+  key_name   = "deployer"
   public_key = var.public_key
 
 }
@@ -65,8 +65,8 @@ resource "aws_iam_instance_profile" "example" {
 }
 
 resource "aws_instance_type" "name" {
-  ami                    = data.aws_ami.ec2.id
-  instance_type          = var.instance_type
+  ami                    = "ami-08c40ec9ead489470"
+  instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.allow_tls.id]
   key_name               = aws_key_pair.deploy.key_name
   iam_instance_profile   = aws_iam_instance_profile.example.name
