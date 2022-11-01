@@ -9,3 +9,9 @@ In this repo I am working on a complete Development of a CI/CD Pipeline by build
 - It will do an SSH to the Created AWS EC2 Instance and Pull the image from ECR Repository
 - It will remove or replace the previous image or Container running in the instance.
 - It will Run the Container of that Image. 
+
+# Technologies Used
+- Nodejs
+- Terraform
+- AWS CLI
+- GitHub Actions (CI/CD) 
