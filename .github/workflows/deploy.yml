@@ -62,6 +62,7 @@ jobs:
         run: |-
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        working-directory: ./NodeApp
       - name: Deploy Docker Image to EC2
         env:
           SERVER_PUBLIC_IP: ${{ env.SERVER_PUBLIC_IP }}
