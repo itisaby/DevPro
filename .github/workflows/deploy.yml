@@ -29,7 +29,6 @@ jobs:
         id: plan
         run: |-
           terraform plan \
-          -var="region=${{ env.AWS_REGION }}" \
           -var="public_key=${{ env.PUBLIC_SSH_KEY }}" \
           -var="private_key=${{ env.PRIVATE_SSH_KEY }}" \
           -out=PLAN

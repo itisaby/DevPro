@@ -74,7 +74,7 @@ resource "aws_instance_type" "name" {
     type        = "ssh"
     host        = self.public_ip
     user        = "ubuntu"
-    private_key = file("~/.ssh/devenv")
+    private_key = var.private_key
   }
   tags = {
     Name = "terraform-ec2"
