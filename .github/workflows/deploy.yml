@@ -13,8 +13,10 @@ env:
 
 jobs:
   deploy-infra:
-     runs-on: ubuntu-latest
-     steps:
+    runs-on: ubuntu-latest
+    outputs:
+      SERVER_PUBLIC_IP: ${{ steps.set-output.outputs.instance_public_ip }}
+    steps:
       - name: Checkout
         uses: actions/checkout@v2
       - name: setup terraform
@@ -22,8 +24,8 @@ jobs:
         with:
           terraform_wrapper: false
       - name: Terraform Init
-        id: init 
-        run: terraform init 
+        id: init
+        run: terraform init
         working-directory: ./Terraform
       - name: Terraform Plan
         id: plan
@@ -35,6 +37,53 @@ jobs:
         working-directory: ./Terraform
       - name: Terraform Apply
         id: apply
-        run: terraform apply -auto-approve -var="public_key=${{ env.PUBLIC_SSH_KEY }}" -var="private_key=${{ env.PRIVATE_SSH_KEY }}" 
+        run: terraform apply -auto-approve -var="public_key=${{ env.PUBLIC_SSH_KEY }}" -var="private_key=${{ env.PRIVATE_SSH_KEY }}"
         working-directory: ./Terraform
-         
+      - name: Set Output
+        id: set-output
+        run: echo "::set-output name=instance_public_ip::$(terraform output -raw instance_public_ip)"
+        working-directory: ./Terraform
+  deploy-app:
+    runs-on: ubuntu-latest
+    needs: deploy-infra
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set Instance Public IP
+        run: echo SERVER_PUBLIC_IP=${{ needs.deploy-infra.outputs.SERVER_PUBLIC_IP }} >> $GITHUB_ENV
+      - name: Login to AWS ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      - name: Build, tag, and push image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: example-node
+          IMAGE_TAG: ${{ github.sha }}
+        run: |-
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+      - name: Deploy Docker Image to EC2
+        env:
+          SERVER_PUBLIC_IP: ${{ env.SERVER_PUBLIC_IP }}
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: example-node
+          IMAGE_TAG: ${{ github.sha }} 
+          AWS_REGION: ${{ env.AWS_REGION }}
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ env.SERVER_PUBLIC_IP }}
+          username: ubuntu
+          key: ${{ env.PRIVATE_SSH_KEY }}
+          envs: ECR_REGISTRY,ECR_REPOSITORY,IMAGE_TAG,AWS_REGION,SERVER_PUBLIC_IP,PRIVATE_SSH_KEY, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION
+          script: |-
+            sudo apt update
+            sudo apt install docker.io -y
+            sudo apt install awscli -y 
+            sudo $(aws ecr get-login --no-include-email --region us-east-1)
+            sudo docker stop example-node || true
+            sudo docker rm example-node || true
+            sudo docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+            sudo docker run -d --name example-node -p 80:3000 $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG 
+
+
+
