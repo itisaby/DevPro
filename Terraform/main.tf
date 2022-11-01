@@ -7,7 +7,7 @@ terraform {
   }
   backend "s3" {
     bucket = "aws-terraformtt"
-    key = "aws/ec2-deploy/terraform.tfstate"
+    key    = "aws/ec2-deploy/terraform.tfstate"
     region = "us-east-1"
     # role_arn = "arn:aws:iam::219634475281:user/Terraform"
   }
@@ -17,21 +17,20 @@ provider "aws" {
   # Configuration options
   region = "us-east-1"
 }
-resource "aws_vpc" "main" {
-  cidr_block           = "10.123.0.0/16"
-  instance_tenancy     = "default"
-  enable_dns_hostnames = true
-  enable_dns_support   = true
+# resource "aws_vpc" "main" {
+#   cidr_block           = "10.123.0.0/16"
+#   instance_tenancy     = "default"
+#   enable_dns_hostnames = true
+#   enable_dns_support   = true
 
-  tags = {
-    Name = "main"
-  }
-}
+#   tags = {
+#     Name = "main"
+#   }
+# }
 resource "aws_security_group" "allow_tls" {
   name        = "allow_tls"
   description = "Allow TLS inbound traffic"
-  vpc_id      = aws_vpc.main.id
-
+  # vpc_id      = aws_vpc.main.id
   ingress = [{
     description      = "egress"
     from_port        = 0
@@ -64,14 +63,14 @@ resource "aws_security_group" "allow_tls" {
 
 
 resource "aws_key_pair" "deploy" {
-  key_name   = "deployer"
+  key_name = "deployer"
   public_key = var.public_key
-  # public_key  = file("~/.ssh/devenv.pub")
+  # public_key = file("~/.ssh/devenv.pub")
 
 }
 
 resource "aws_iam_instance_profile" "example" {
-  name      = "Terraform"
+  name = "Terraform"
   role = "Terraform"
 }
 
@@ -82,9 +81,9 @@ resource "aws_instance" "name" {
   key_name               = aws_key_pair.deploy.key_name
   iam_instance_profile   = aws_iam_instance_profile.example.name
   connection {
-    type        = "ssh"
-    host        = self.public_ip
-    user        = "ubuntu"
+    type = "ssh"
+    host = self.public_ip
+    user = "ubuntu"
     private_key = var.private_key
     # private_key = file("~/.ssh/devenv")
   }
@@ -94,7 +93,7 @@ resource "aws_instance" "name" {
 }
 
 output "public_ip" {
-  value = aws_instance.name.public_ip
+  value     = aws_instance.name.public_ip
   sensitive = true
 }
   

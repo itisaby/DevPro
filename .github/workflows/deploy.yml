@@ -35,6 +35,6 @@ jobs:
         working-directory: ./Terraform
       - name: Terraform Apply
         id: apply
-        run: terraform apply PLAN
+        run: terraform apply -auto-approve -var="public_key=${{ env.PUBLIC_SSH_KEY }}" -var="private_key=${{ env.PRIVATE_SSH_KEY }}" 
         working-directory: ./Terraform
          
