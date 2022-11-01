@@ -63,8 +63,8 @@ resource "aws_security_group" "allow_tls" {
 
 
 resource "aws_key_pair" "deploy" {
-  key_name = "deployer"
-  public_key = var.public_key
+  key_name   = "deployer"
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDCTY0VbF293HTGUcmfSqGwtHHdb6D+nt3IGpSMFUd5zpWjWHeUl2LYFbedH3ynOduOCN3/J73wCX3OI7x3DVwxObh05Ws7sOBjgpHIzKQRBzQZ0gq4RqREaTIskifMT5Jr123DAj4ATN6BOPbsb4amM5kby94xzDXytze3R16/JwEVOGOpISQab9hIcjbiSHG9J8+g2y/RpsaFoUSd9hQbiL2Id3x3bvNjbXeU8ZlH1IA5bxosGY4qYoSM1GNWqZpZ2QFu0DVZDMGJKxjLwOKOgZYk3upLivnn1oIpUqElaByLE61sE5B+lPNzs0n2yQiGPGVVcU7UBFuTSl+VtvUN1VQKnYMjKRsOplGw1MWn6iF5tPd3oUi9kI6zMb0Jf+11Cf1WnBMin36Akx6l8HImvnfUFjoQlnlyEjxBD7K17WD+8VzXlwHsnivJ7CNs7wDWqIQ6GGWCgKpALGEuRUveV1fsrga95QjlWuzb1bfQuNBQygHzc1fNbCPEgxHyzmE= arnab@arnab-HP-Pavilion-x360-Convertible-14-dh1xxx"
   # public_key = file("~/.ssh/devenv.pub")
 
 }
@@ -81,9 +81,9 @@ resource "aws_instance" "name" {
   key_name               = aws_key_pair.deploy.key_name
   iam_instance_profile   = aws_iam_instance_profile.example.name
   connection {
-    type = "ssh"
-    host = self.public_ip
-    user = "ubuntu"
+    type        = "ssh"
+    host        = self.public_ip
+    user        = "ubuntu"
     private_key = var.private_key
     # private_key = file("~/.ssh/devenv")
   }
@@ -96,4 +96,4 @@ output "public_ip" {
   value     = aws_instance.name.public_ip
   sensitive = true
 }
-  
+
