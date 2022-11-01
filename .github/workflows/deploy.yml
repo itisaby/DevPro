@@ -83,7 +83,7 @@ jobs:
         with:
           host: ${{ env.SERVER_PUBLIC_IP }}
           username: ubuntu
-          key: ${{ env.PRIVATE_SSH_KEY }}
+          key: ${{ secrets.PRIVATE_SSH_KEY }}
           envs: ECR_REPOSITORY,IMAGE_TAG,AWS_REGION,SERVER_PUBLIC_IP,PRIVATE_SSH_KEY, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION
           script: |-
             sudo apt update
