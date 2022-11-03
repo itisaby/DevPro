@@ -94,6 +94,3 @@ jobs:
             sudo docker rm example-node || true
             sudo docker pull itisaby/$ECR_REPOSITORY:$IMAGE_TAG
             sudo docker run -d --name example-node -p 80:3000 itisaby/$ECR_REPOSITORY:$IMAGE_TAG 
-
-
-
