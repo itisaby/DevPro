@@ -37,15 +37,15 @@ resource "aws_subnet" "public_subnets" {
   }
 }
 
-resource "aws_subnet" "private_subnets" {
-  count             = length(var.private_subnet_cidrs)
-  vpc_id            = aws_vpc.main.id
-  cidr_block        = element(var.private_subnet_cidrs, count.index)
-  availability_zone = element(var.azs, count.index)
-  tags = {
-    Name = "Private Subnet ${count.index + 1}"
-  }
-}
+# resource "aws_subnet" "private_subnets" {
+#   count             = length(var.private_subnet_cidrs)
+#   vpc_id            = aws_vpc.main.id
+#   cidr_block        = element(var.private_subnet_cidrs, count.index)
+#   availability_zone = element(var.azs, count.index)
+#   tags = {
+#     Name = "Private Subnet ${count.index + 1}"
+#   }
+# }
 
 resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.main.id
@@ -125,7 +125,7 @@ resource "aws_instance" "name" {
   vpc_security_group_ids = [aws_security_group.allow_tls.id]
   key_name               = aws_key_pair.deploy.key_name
   iam_instance_profile   = aws_iam_instance_profile.example.name
-  subnet_id              = aws_subnet.public_subnets[1].id
+  subnet_id              = aws_subnet.public_subnets[0].id
   connection {
     type        = "ssh"
     host        = self.public_ip
