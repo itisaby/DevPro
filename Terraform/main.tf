@@ -115,7 +115,7 @@ resource "aws_key_pair" "deploy" {
 }
 
 resource "aws_iam_instance_profile" "example" {
-  name = "Terraform"
+  name = "Hello"
   role = "Terraform"
 }
 
@@ -125,7 +125,7 @@ resource "aws_instance" "name" {
   vpc_security_group_ids = [aws_security_group.allow_tls.id]
   key_name               = aws_key_pair.deploy.key_name
   iam_instance_profile   = aws_iam_instance_profile.example.name
-  subnet_id              = aws_subnet.public_subnets[0].id
+  subnet_id              = aws_subnet.public_subnets[1].id
   connection {
     type        = "ssh"
     host        = self.public_ip
