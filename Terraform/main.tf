@@ -116,7 +116,7 @@ resource "aws_key_pair" "deploy" {
 }
 
 resource "aws_iam_instance_profile" "example" {
-  name = "Terraform"
+  name = "Terraform2"
   role = "Terraform"
 }
 
