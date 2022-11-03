@@ -49,7 +49,6 @@ resource "aws_subnet" "private_subnets" {
 
 resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.main.id
-
   tags = {
     Name = "Project VPC IG"
   }
@@ -116,7 +115,7 @@ resource "aws_key_pair" "deploy" {
 }
 
 resource "aws_iam_instance_profile" "example" {
-  name = "Terrafo"
+  name = "Terraform"
   role = "Terraform"
 }
 
