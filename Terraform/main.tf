@@ -126,6 +126,7 @@ resource "aws_instance" "name" {
   key_name               = aws_key_pair.deploy.key_name
   iam_instance_profile   = aws_iam_instance_profile.example.name
   subnet_id              = aws_subnet.public_subnets[0].id
+  associate_public_ip_address = true
   connection {
     type        = "ssh"
     host        = self.public_ip
