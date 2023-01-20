@@ -2,6 +2,10 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: DevPro
+  links:
+    - url: https://github.com/itisaby
+      title: My Dashboard
+      icon: dashboard
   annotations:
     github.com/project-slug: itisaby/DevPro
     github.com/project-readme-path: README.md
