@@ -4,6 +4,7 @@ metadata:
   name: DevPro
   annotations:
     github.com/project-slug: itisaby/DevPro
+    github.com/project-readme-path: README.md
 spec:
   type: other
   lifecycle: unknown
