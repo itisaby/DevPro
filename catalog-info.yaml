@@ -7,7 +7,7 @@ metadata:
       title: My Dashboard
       icon: dashboard
   annotations:
-    backstage.io/techdocs-ref: url:https://github.com/backstage/backstage/tree/master
+    backstage.io/techdocs-ref: url:https://github.com/itisaby/DevPro/tree/master
     github.com/project-slug: itisaby/DevPro
     github.com/project-readme-path: README.md
 spec:
